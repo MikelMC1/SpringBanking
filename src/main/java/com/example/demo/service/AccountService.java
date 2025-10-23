@@ -49,7 +49,6 @@ public class AccountService {
         ).orElseThrow(() ->  new AccountNotFoundException("No Account with id: " + id ));
     }
 
-
     public void deleteAccount(Long id) {
         if (accountRepository.existsById(id)) {
             accountRepository.deleteById(id);

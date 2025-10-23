@@ -8,7 +8,7 @@ import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,12 +19,14 @@ public class LoanMapper {
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
 
+
     public Loan toLoan(CreateLoanDto dto) {
         Loan loan = new Loan();
 
         loan.setLoanAmount(dto.getLoanAmount());
         loan.setInterestRate(dto.getInterestRate());
         loan.setTermYears(dto.getTermYears());
+
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + dto.getUserId()));

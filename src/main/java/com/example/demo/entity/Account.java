@@ -1,6 +1,4 @@
 package com.example.demo.entity;
-
-
 import com.example.demo.enums.AccountTypes;
 import jakarta.persistence.*;
 import lombok.Data;
