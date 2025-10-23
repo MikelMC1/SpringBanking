@@ -1,8 +1,5 @@
 package com.example.demo.dtos;
-
-import com.example.demo.entity.User;
 import com.example.demo.enums.AccountTypes;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dtos.CreateTransactionDto;
+import com.example.demo.dtos.GetUserDTO;
 import com.example.demo.entity.Transaction;
 import com.example.demo.entity.User;
 import org.springframework.stereotype.Component;
@@ -10,13 +11,14 @@ import java.util.Optional;
 @Component
 public class CreateTransactionMapper {
 
-    public Transaction toEntity(CreateTransactionDto dto, User user, User user2) {
+    public Transaction toEntity(CreateTransactionDto dto, User user1,User user2) {
         if (dto == null) {
             return null;
         }
 
+
         Transaction transaction = new Transaction();
-        transaction.setUser(user);
+        transaction.setUser(user1);
         transaction.setUser2(user2);
         transaction.setTransactionType(dto.getTransactionType());
         transaction.setTransactionStatus(dto.getTransactionStatus());

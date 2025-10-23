@@ -6,7 +6,6 @@ import com.example.demo.dtos.GetUserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.mapper.CreateUserMapper;
-import com.example.demo.mapper.GetUserMapper;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CreateUserMapper createUserMapper;
-    private final GetUserMapper getUserMapper;
 
 
     public User createUser(CreateUserDto dto) {

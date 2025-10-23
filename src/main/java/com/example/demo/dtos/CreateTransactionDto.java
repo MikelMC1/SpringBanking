@@ -3,7 +3,6 @@ package com.example.demo.dtos;
 
 import com.example.demo.enums.TransactionStatus;
 import com.example.demo.enums.TransactionType;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +15,7 @@ public class CreateTransactionDto {
 
     private Long userID;
 
-
     private Long user2Id;
-
-
 
     private TransactionType transactionType;
 

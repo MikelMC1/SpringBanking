@@ -1,20 +1,20 @@
 package com.example.demo.service;
 
 import com.example.demo.dtos.CreateLoanDto;
-import com.example.demo.dtos.CreateUserDto;
+import com.example.demo.dtos.GetLoanDto;
 import com.example.demo.entity.Loan;
-import com.example.demo.entity.User;
-import com.example.demo.enums.LoanStatus;
 import com.example.demo.exceptions.LoanNotFoundException;
+import com.example.demo.mapper.GetLoanMapper;
 import com.example.demo.mapper.LoanMapper;
 import com.example.demo.repository.LoanRepository;
-import com.example.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,36 +22,30 @@ public class LoanService {
 
     private final LoanRepository loanRepository;
     private final LoanMapper loanMapper;
+    private final GetLoanMapper getLoanMapper;
 
 
 
     @Transactional
-    public Loan createLoan(CreateLoanDto dto) {
+    public GetLoanDto createLoan(CreateLoanDto dto) {
         Loan loan   = loanMapper.toLoan(dto);
-        return loanRepository.save(loan);
+        loanRepository.save(loan);
+
+        loan.setRemainingAmount(calculateOwedAmount(loan));
+        loan.setNextPaymentDate(calculateNextPaymentDate(loan.getCreationDate()));
+
+        return getLoanMapper.toGetLoanDTO(loan);
     }
 
 
-    public List<Loan> getAllLoans() {
-        return loanRepository.findAll();
-    }
-
-
-    public Loan getLoanById(Long id) throws LoanNotFoundException {
-        return loanRepository.findById(id)
-                .orElseThrow(() -> new LoanNotFoundException("Loan with ID " + id + " not found"));
-    }
-
-    //TODO
-    public Loan updateLoan(Long id, CreateLoanDto dto) throws LoanNotFoundException {
-        Loan existingLoan = loanRepository.findById(id)
+    public GetLoanDto getLoanById(Long id) throws LoanNotFoundException {
+        Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new LoanNotFoundException("Loan with ID " + id + " not found"));
 
-
-        loanMapper.updateLoanFromDto(existingLoan, dto);
-
-        return loanRepository.save(existingLoan);
+        return getLoanMapper.toGetLoanDTO(loan);
     }
+
+
 
     public void deleteLoan(Long id) throws LoanNotFoundException {
         if (!loanRepository.existsById(id)) {
@@ -60,17 +54,23 @@ public class LoanService {
         loanRepository.deleteById(id);
     }
 
+    public BigDecimal calculateOwedAmount(Loan loan){
 
-    public List<Loan> getActiveLoans() {
-        return loanRepository.findByStatus(LoanStatus.ACTIVE);
+        double interest = loan.getInterestRate();
+        BigDecimal principal = loan.getLoanAmount();
+        int years = loan.getTermYears();
+
+        BigDecimal interestAmount = principal.multiply(BigDecimal.valueOf(interest/100)).multiply(BigDecimal.valueOf(years));
+
+        return loan.getLoanAmount().add(interestAmount);
     }
 
 
-    public Loan updateRemainingAmount(Long loanId, BigDecimal newRemaining) throws LoanNotFoundException {
-        Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new LoanNotFoundException("Loan with ID " + loanId + " not found"));
-
-        loan.setRemainingAmount(newRemaining);
-        return loanRepository.save(loan);
+    public Date calculateNextPaymentDate(Date creationDate){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(creationDate);       // set the starting date
+        cal.add(Calendar.DAY_OF_MONTH, 30); // add 30 days
+        return cal.getTime();
     }
+
 }

@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dtos.CreateUserDto;
-import com.example.demo.dtos.GetAccountDto;
 import com.example.demo.dtos.GetUserDTO;
 import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
