@@ -4,37 +4,31 @@ import com.example.demo.dtos.GetAccountDto;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.User;
 import com.example.demo.exceptions.AccountNotFoundException;
-import com.example.demo.mapper.CreateAccountMapper;
+import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-
-
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final CreateAccountMapper createAccountMapper;
     private final UserRepository userRepository;
+    private final CreateAccountDto createAccountDto;
 
 
+    public Account createAccount(CreateAccountDto dto) throws UserNotFoundException {
 
 
-
-    public Account createAccount(CreateAccountDto dto) throws Exception {
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new Exception("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Account account = createAccountMapper.toAccount(dto, user);
+        Account account = createAccountDto.toAccount(dto, user);
         return accountRepository.save(account);
     }
-
-
-
-
 
     public GetAccountDto getAccountById(Long id) throws Exception {
         Optional<Account> accountOptional = accountRepository.findById(id);
