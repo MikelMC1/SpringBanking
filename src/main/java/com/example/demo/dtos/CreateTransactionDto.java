@@ -13,9 +13,9 @@ import lombok.Data;
 public class CreateTransactionDto {
 
 
-    private Long userID;
+    private Long AccountId;
 
-    private Long user2Id;
+    private Long Account2Id;
 
     private TransactionType transactionType;
 

@@ -21,12 +21,12 @@ public class Transaction {
     private Long transactionId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "user2_id", nullable = true)
-    private User user2;
+    @JoinColumn(name = "account2_id", nullable = true)
+    private Account account2;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
