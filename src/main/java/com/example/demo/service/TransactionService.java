@@ -2,14 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.dtos.CreateTransactionDto;
 import com.example.demo.entity.Account;
+import com.example.demo.entity.Loan;
 import com.example.demo.entity.Transaction;
 import com.example.demo.enums.TransactionStatus;
 import com.example.demo.enums.TransactionType;
 import com.example.demo.exceptions.AccountNotFoundException;
 import com.example.demo.exceptions.InsufficentBalanceException;
+import com.example.demo.exceptions.LoanNotFoundException;
 import com.example.demo.mapper.CreateTransactionMapper;
-import com.example.demo.mapper.GetUserMapper;
 import com.example.demo.repository.AccountRepository;
+import com.example.demo.repository.LoanRepository;
 import com.example.demo.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +24,10 @@ import java.math.BigDecimal;
 
 public class TransactionService {
 
-
-    private final AccountService accountService;
     private final TransactionRepository transactionRepository;
     private final CreateTransactionMapper createtransactionMapper;
-    private final UserService userService;
-    private final GetUserMapper getUserMapper;
     private final AccountRepository accountRepository;
+    private final LoanRepository loanRepository;
 
 
     @Transactional
@@ -113,7 +112,7 @@ public class TransactionService {
         CreateTransactionDto transactionDto = CreateTransactionDto.builder()
                 .AccountId(account1.getAccountId())
                 .Account2Id(account2.getAccountId())  //not null
-                .transactionType(TransactionType.WITHDRAW)
+                .transactionType(TransactionType.TRANSFER)
                 .transactionStatus(TransactionStatus.APPROVED)
                 .amount(amount)
                 .build();
@@ -133,8 +132,39 @@ public class TransactionService {
     }
 
 
+    @Transactional
+    public void  makeLoanPayment(Long loanId,Long accountId,double amount) throws LoanNotFoundException {
+
+        Account targetAccount = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+
+        Loan targetLoan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new LoanNotFoundException("Loan was not found"));
 
 
+        removeMoney(targetAccount.getAccountId(), amount);
+
+        BigDecimal currentLoan = targetLoan.getRemainingAmount();
+        BigDecimal amountToSubtract = BigDecimal.valueOf(amount);
+
+        BigDecimal newRemaining = currentLoan.subtract(amountToSubtract);
+
+        targetLoan.setRemainingAmount(newRemaining);
+
+        loanRepository.save(targetLoan);
+
+
+        CreateTransactionDto transactionDto = CreateTransactionDto.builder()
+                .AccountId(accountId)
+                .Account2Id(null) // payment for loan so no second user
+                .transactionType(TransactionType.LOAN_PAYMENT)
+                .transactionStatus(TransactionStatus.APPROVED)
+                .amount(amount)
+                .build();
+
+        createTransaction(transactionDto, targetAccount, null);
+
+    }
 
 
 
