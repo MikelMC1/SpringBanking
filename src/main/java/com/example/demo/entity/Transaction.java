@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.LoanStatus;
 import com.example.demo.enums.TransactionStatus;
 import com.example.demo.enums.TransactionType;
 import jakarta.persistence.*;

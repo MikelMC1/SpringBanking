@@ -8,7 +8,6 @@ import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 @Service
