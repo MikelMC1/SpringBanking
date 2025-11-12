@@ -15,21 +15,21 @@ public class TransactionController {
     private final TransactionService transactionService;
 
 
-    @PatchMapping("/transaction/withdraw/{id}")
-    public ResponseEntity<String> removeMoney(@PathVariable Long id, @RequestBody double amount)  {
-        transactionService.removeMoney(id,amount);
+    @PatchMapping("/transaction/withdraw")
+    public ResponseEntity<String> removeMoney(@RequestBody PaymentDtos dto)  {
+        transactionService.removeMoney(dto.getAccountId(), dto.getAmount());
         return ResponseEntity.ok("Money withdrawn successfully!");
     }
 
-    @PatchMapping("/transaction/deposit/{id}")
-    public ResponseEntity<String> addMoney(@PathVariable Long id, @RequestBody double amount)  {
-        transactionService.addMoney(id,amount);
+    @PatchMapping("/transaction/deposit")
+    public ResponseEntity<String> addMoney(@RequestBody PaymentDtos dto)  {
+        transactionService.addMoney(dto.getAccountId(), dto.getAmount());
         return ResponseEntity.ok("Money added successfully!");
     }
 
-    @PatchMapping("/transaction/transfer/{id}/{id2}")
-    public ResponseEntity<String> transferMoney(@PathVariable Long id, @PathVariable Long id2, @RequestBody double amount)  {
-        transactionService.transferMoney(id,id2,amount);
+    @PatchMapping("/transaction/transfer")
+    public ResponseEntity<String> transferMoney(@RequestBody PaymentDtos dto)  {
+        transactionService.transferMoney(dto.getAccountId(), dto.getAccount2Id(), dto.getAmount());
 
         return ResponseEntity.ok("Money transferred successfully!");
     }

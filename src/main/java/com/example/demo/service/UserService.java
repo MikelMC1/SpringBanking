@@ -8,6 +8,7 @@ import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.mapper.CreateUserMapper;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +20,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CreateUserMapper createUserMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     public User createUser(CreateUserDto dto) {
         User user = createUserMapper.toUser(dto);
+
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         return userRepository.save(user);
     }
 

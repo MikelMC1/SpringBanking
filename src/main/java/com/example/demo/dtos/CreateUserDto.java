@@ -1,7 +1,5 @@
 package com.example.demo.dtos;
 
-
-import com.example.demo.enums.AccountTypes;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -26,8 +24,6 @@ public class CreateUserDto {
                     "- one special character (! @ # $ & *)")
     private String password;
 
-
-    private AccountTypes accountType;
 
 
     public CreateUserDto() {

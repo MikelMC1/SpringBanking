@@ -7,7 +7,7 @@ import com.example.demo.entity.Transaction;
 import com.example.demo.enums.TransactionStatus;
 import com.example.demo.enums.TransactionType;
 import com.example.demo.exceptions.AccountNotFoundException;
-import com.example.demo.exceptions.InsufficentBalanceException;
+import com.example.demo.exceptions.InsufficientBalanceException;
 import com.example.demo.exceptions.LoanNotFoundException;
 import com.example.demo.mapper.CreateTransactionMapper;
 import com.example.demo.repository.AccountRepository;
@@ -50,7 +50,7 @@ public class TransactionService {
         BigDecimal newBalance = currentBalance.subtract(amountToRemove);
 
         if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InsufficentBalanceException("Insufficient funds");
+            throw new InsufficientBalanceException("Insufficient funds");
         }
 
         targetAccount.setBalance(newBalance);
@@ -165,6 +165,8 @@ public class TransactionService {
         createTransaction(transactionDto, targetAccount, null);
 
     }
+
+    //public void week
 
 
 
