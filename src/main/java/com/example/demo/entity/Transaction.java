@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.TransactionMethod;
 import com.example.demo.enums.TransactionStatus;
 import com.example.demo.enums.TransactionType;
 import jakarta.persistence.*;
@@ -38,6 +39,14 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionStatus transactionStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private TransactionMethod transactionMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "card_id")  // Foreign key column in Transaction table
+    private Card card;
 
     @Column
     private double amount;

@@ -17,11 +17,12 @@ public class ExceptionHandler {
     }
 
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(AccountNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorDTO> handleAccountNotFoundException(AccountNotFoundException ex) {
         return new ResponseEntity<>(buildError(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
+
 
 
 

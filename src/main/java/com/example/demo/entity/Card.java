@@ -3,7 +3,8 @@ import com.example.demo.enums.CardType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.CreationTimestamp;
+import java.util.Date;
 
 @Entity
 @Data
@@ -22,8 +23,9 @@ public class Card {
     @Column(nullable = false)
     private String fullName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 16)
     private String cardNumber;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -34,6 +36,13 @@ public class Card {
 
     @Column(nullable = false)
     private int expYear;
+
+    @Column(nullable = false)
+    private int CVV;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Date creationDate;
 
 
 }

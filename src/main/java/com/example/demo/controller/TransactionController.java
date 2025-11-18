@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class TransactionController {
     private final TransactionService transactionService;
 
-
     @PatchMapping("/transaction/withdraw")
-    public ResponseEntity<String> removeMoney(@RequestBody PaymentDtos dto)  {
-        transactionService.removeMoney(dto.getAccountId(), dto.getAmount());
+    public ResponseEntity<String> withdrawMoney(@RequestBody PaymentDtos dto) {
+        transactionService.withdrawMoney(dto);  // pass entire DTO
         return ResponseEntity.ok("Money withdrawn successfully!");
     }
+
 
     @PatchMapping("/transaction/deposit")
     public ResponseEntity<String> addMoney(@RequestBody PaymentDtos dto)  {
@@ -29,7 +29,7 @@ public class TransactionController {
 
     @PatchMapping("/transaction/transfer")
     public ResponseEntity<String> transferMoney(@RequestBody PaymentDtos dto)  {
-        transactionService.transferMoney(dto.getAccountId(), dto.getAccount2Id(), dto.getAmount());
+        transactionService.transferMoney(dto);
 
         return ResponseEntity.ok("Money transferred successfully!");
     }
@@ -37,7 +37,7 @@ public class TransactionController {
     @PatchMapping("/transaction/payment/loan")
     public ResponseEntity<String> loanPayment(@RequestBody PaymentDtos dto) throws LoanNotFoundException {
 
-        transactionService.makeLoanPayment(dto.getLoanId(),dto.getAccountId(),dto.getAmount());
+        transactionService.makeLoanPayment(dto);
 
         return ResponseEntity.ok("Payment Successful for loan "+dto.getLoanId()+" and account "+dto.getAccountId());
     }

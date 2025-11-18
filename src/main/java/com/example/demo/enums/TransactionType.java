@@ -6,5 +6,6 @@ public enum TransactionType {
     DEPOSIT,
     TRANSFER,
     CHARGEBACK,
-    LOAN_PAYMENT
+    LOAN_PAYMENT,
+    PAYMENT
 }

@@ -1,5 +1,7 @@
 package com.example.demo.dtos;
 
+import com.example.demo.entity.Card;
+import com.example.demo.enums.TransactionMethod;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +20,9 @@ public class PaymentDtos {
     private Long loanId;
 
     private Double amount;
+
+    private TransactionMethod transactionMethod;
+
+    private Long cardId;
 
 }

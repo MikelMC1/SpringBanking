@@ -1,6 +1,6 @@
 package com.example.demo.dtos;
 
-
+import com.example.demo.enums.TransactionMethod;
 import com.example.demo.enums.TransactionStatus;
 import com.example.demo.enums.TransactionType;
 import lombok.AllArgsConstructor;
@@ -20,6 +20,10 @@ public class CreateTransactionDto {
     private TransactionType transactionType;
 
     private TransactionStatus transactionStatus;
+
+    private TransactionMethod transactionMethod;
+
+    private Long cardId;
 
     private double amount;
 
