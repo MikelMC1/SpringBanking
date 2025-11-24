@@ -9,6 +9,8 @@ import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 @Service
 @RequiredArgsConstructor
@@ -50,6 +52,23 @@ public class AccountService {
         }
         throw new AccountNotFoundException("Account not found with id: " + id);
     }
+
+
+    public List<GetAccountDto> getAccountsByEmail(String email) throws AccountNotFoundException {
+        List<Account> accounts = accountRepository.findByUserEmail(email);
+        if (accounts.isEmpty()) {
+            throw new AccountNotFoundException("No accounts found for email: " + email);
+        }
+        return accounts.stream()
+                .map(acc -> new GetAccountDto(
+                        acc.getAccountId(),
+                        acc.getBalance(),
+                        acc.getLastUpdate(),
+                        acc.getAccountType()))
+                .toList();
+    }
+
+
 
 
 

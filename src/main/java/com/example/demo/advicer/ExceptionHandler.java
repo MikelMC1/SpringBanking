@@ -1,6 +1,7 @@
 package com.example.demo.advicer;
 
 import com.example.demo.exceptions.AccountNotFoundException;
+import com.example.demo.exceptions.InsufficientBalanceException;
 import com.example.demo.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,15 @@ public class ExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorDTO> handleAccountNotFoundException(AccountNotFoundException ex) {
         return new ResponseEntity<>(buildError(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(InsufficientBalanceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDTO> handleInsufficientBalanceException(InsufficientBalanceException ex) {
+        ErrorDTO errorDTO = new ErrorDTO();
+        errorDTO.setMessage(ex.getMessage());
+        errorDTO.setStatus(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
 
 

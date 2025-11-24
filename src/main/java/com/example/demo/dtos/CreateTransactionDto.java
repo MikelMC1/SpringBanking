@@ -7,15 +7,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
 public class CreateTransactionDto {
 
 
-    private Long AccountId;
+    private Long transactionId;
 
-    private Long Account2Id;
+    private Long accountId;
+
+    private Long account2Id;
 
     private TransactionType transactionType;
 
@@ -26,6 +30,8 @@ public class CreateTransactionDto {
     private Long cardId;
 
     private double amount;
+
+    private Date creationDate;
 
     public CreateTransactionDto() {
 

@@ -6,5 +6,6 @@ public enum TransactionMethod {
     BANK_TRANSFER,
     MOBILE_PAYMENT,
     ONLINE_PAYMENT,
-    ATM
+    ATM,
+    APP
 }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v3")
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class LoanController {
         return ResponseEntity.ok("Loan deleted successfully!");
     }
 
-
+    @GetMapping("/loan/account/{accountId}")
+    public ResponseEntity<List<GetLoanDto>> getLoansByAccount(@PathVariable Long accountId) {
+        List<GetLoanDto> loans = loanService.getLoansByAccountId(accountId);
+        return ResponseEntity.ok(loans);
+    }
 
 }

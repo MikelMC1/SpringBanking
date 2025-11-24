@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -52,6 +53,13 @@ public class LoanService {
            throw new LoanNotFoundException("Loan with ID " + id + " not found");
         }
         loanRepository.deleteById(id);
+    }
+
+    public List<GetLoanDto> getLoansByAccountId(Long accountId) {
+        List<Loan> loans = loanRepository.findByAccount_AccountId(accountId);
+        return loans.stream()
+                .map(getLoanMapper::toGetLoanDTO)
+                .toList();
     }
 
     public BigDecimal calculateOwedAmount(Loan loan){

@@ -2,13 +2,17 @@ package com.example.demo.service;
 
 import com.example.demo.dtos.CardDto;
 import com.example.demo.entity.Card;
+import com.example.demo.enums.CardStatus;
 import com.example.demo.mapper.CardMapper;
 import com.example.demo.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +61,73 @@ public class CardService {
             sb.append(secureRandom.nextInt(10));
         }
         return sb.toString();
+    }
+    
+    public List<CardDto> getCardsByAccountId(Long accountId) {
+        List<Card> cards = cardRepository.findByAccount_AccountId(accountId);
+        return cards.stream()
+                .map(cardMapper::CardToCardDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public CardDto freezeCard(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        
+        if (card.getStatus() == CardStatus.BLOCKED || card.getStatus() == CardStatus.LOST || card.getStatus() == CardStatus.STOLEN) {
+            throw new RuntimeException("Cannot freeze a " + card.getStatus().name().toLowerCase() + " card");
+        }
+        
+        if (card.getStatus() == CardStatus.FROZEN) {
+            card.setStatus(CardStatus.ACTIVE);
+        } else {
+            card.setStatus(CardStatus.FROZEN);
+        }
+        
+        cardRepository.save(card);
+        return cardMapper.CardToCardDto(card);
+    }
+
+    @Transactional
+    public CardDto blockCard(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        
+        if (card.getStatus() == CardStatus.BLOCKED) {
+            throw new RuntimeException("Card is already blocked");
+        }
+        
+        card.setStatus(CardStatus.BLOCKED);
+        cardRepository.save(card);
+        return cardMapper.CardToCardDto(card);
+    }
+
+    @Transactional
+    public CardDto reportCardLost(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        
+        if (card.getStatus() == CardStatus.BLOCKED || card.getStatus() == CardStatus.STOLEN) {
+            throw new RuntimeException("Card is already " + card.getStatus().name().toLowerCase());
+        }
+        
+        card.setStatus(CardStatus.LOST);
+        cardRepository.save(card);
+        return cardMapper.CardToCardDto(card);
+    }
+
+    @Transactional
+    public CardDto reportCardStolen(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        
+        if (card.getStatus() == CardStatus.BLOCKED || card.getStatus() == CardStatus.LOST) {
+            throw new RuntimeException("Card is already " + card.getStatus().name().toLowerCase());
+        }
+        
+        card.setStatus(CardStatus.STOLEN);
+        cardRepository.save(card);
+        return cardMapper.CardToCardDto(card);
     }
 }

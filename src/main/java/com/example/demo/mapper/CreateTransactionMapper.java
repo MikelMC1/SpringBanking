@@ -25,19 +25,19 @@ public class CreateTransactionMapper {
 
         Transaction transaction = new Transaction();
 
-
-        if (dto.getAccountId() != null) {
-            Account account1 = accountRepository.findById(dto.getAccountId())
-                    .orElseThrow(() -> new AccountNotFoundException("Account not found"));
-            transaction.setAccount(account1);
+        if (dto.getAccountId() == null) {
+            throw new AccountNotFoundException("Account ID is required");
         }
+        Account account1 = accountRepository.findById(dto.getAccountId())
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+        transaction.setAccount(account1);
+
 
         if (dto.getAccount2Id() != null) {
             Account account2 = accountRepository.findById(dto.getAccount2Id())
                     .orElseThrow(() -> new AccountNotFoundException("Account2 not found"));
             transaction.setAccount2(account2);
         }
-
 
         if (dto.getCardId() != null) {
             Card card = cardRepository.findById(dto.getCardId())
@@ -59,13 +59,15 @@ public class CreateTransactionMapper {
         }
 
         return CreateTransactionDto.builder()
-                .AccountId(transaction.getAccount() != null ? transaction.getAccount().getAccountId() : null)
-                .Account2Id(transaction.getAccount2() != null ? transaction.getAccount2().getAccountId() : null)
+                .transactionId(transaction.getTransactionId())
+                .accountId(transaction.getAccount() != null ? transaction.getAccount().getAccountId() : null)
+                .account2Id(transaction.getAccount2() != null ? transaction.getAccount2().getAccountId() : null)
                 .transactionType(transaction.getTransactionType())
                 .transactionStatus(transaction.getTransactionStatus())
                 .transactionMethod(transaction.getTransactionMethod())
                 .cardId(transaction.getCard() != null ? transaction.getCard().getCardId() : null)
                 .amount(transaction.getAmount())
+                .creationDate(transaction.getCreationDate())
                 .build();
     }
 }

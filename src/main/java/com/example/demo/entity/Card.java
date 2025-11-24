@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 import com.example.demo.enums.CardType;
+import com.example.demo.enums.CardStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,5 +45,8 @@ public class Card {
     @Column(nullable = false, updatable = false)
     private Date creationDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'ACTIVE'")
+    private CardStatus status = CardStatus.ACTIVE;
 
 }

@@ -35,4 +35,22 @@ public class CardMapper {
         return  card;
 
     }
+    
+    public CardDto CardToCardDto(Card card){
+        if (card == null) {
+            return null;
+        }
+        
+        return CardDto.builder()
+                .cardId(card.getCardId())
+                .accountId(card.getAccount() != null ? card.getAccount().getAccountId() : null)
+                .fullName(card.getFullName())
+                .cardType(card.getCardType())
+                .expMonth(card.getExpMonth())
+                .expYear(card.getExpYear())
+                .cardNumber(card.getCardNumber())
+                .CVV(card.getCVV())
+                .status(card.getStatus())
+                .build();
+    }
 }

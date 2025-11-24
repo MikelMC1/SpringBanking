@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v2")
 @RequiredArgsConstructor
@@ -20,6 +22,12 @@ public class AccountController {
     public GetAccountDto getUser(@PathVariable Long id) throws Exception {
         return accountService.getAccountById(id);
     }
+
+    @GetMapping("/account/by-email")
+    public List<GetAccountDto> getAccountByEmail(@RequestParam String email) throws Exception {
+        return accountService.getAccountsByEmail(email);
+    }
+
 
 
     @PostMapping("/account")
@@ -40,7 +48,7 @@ public class AccountController {
     @DeleteMapping("/account/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
-        return ResponseEntity.ok("User deleted successfully!");
+            return ResponseEntity.ok("User deleted successfully!");
     }
 
 
